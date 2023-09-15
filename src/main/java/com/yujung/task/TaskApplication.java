@@ -1,13 +1,13 @@
-package com.yujung.spring_basic;
+package com.yujung.task;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BasicApplication {
+public class TaskApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BasicApplication.class, args);
+		SpringApplication.run(TaskApplication.class, args);
 	}
 
 }
