@@ -1,5 +1,9 @@
 package com.yujung.spring_basic.controller;
 
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yujung.spring_basic.dto.request.PatchValidationDto;
 import com.yujung.spring_basic.dto.request.PostRequestBodyDto;
+import com.yujung.spring_basic.dto.response.TmpResponseDto;
 
 // description: Controller - 레이어드 아키텍처 상의 프레젠테이션 영역 //
 // description: 클라이언트로부터 요청(입력)을 받고 서비스 결과를 응답(출력)하는 영역 //
@@ -95,9 +101,24 @@ public class MainController {
   // description: 문자열 혹은 객체로 받을 수 있음 //
   @PostMapping("request-body")
   public String postRequestBody(
+    // @RequestBody String requestBody
     @RequestBody PostRequestBodyDto requestBody
   ) {
       return "Request의 Body는 " + requestBody.getName() + " " + requestBody.getAge() + " 입니다.";
+  }
+
+  @PatchMapping("validation")
+  public String validation(
+    // description: DTO에 작성된 유효성 검사를 적용하려한다면 @Valid를 매개변수 자리에 추가해줘야 함 //
+    @RequestBody @Valid PatchValidationDto requestBody
+  ) {
+    return requestBody.getArg1();
+  }
+
+  @GetMapping("response-entity")
+  public ResponseEntity<TmpResponseDto> getResponseEntity() {
+    TmpResponseDto responseBody = new TmpResponseDto("안녕", 10);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
   }
 
 }
