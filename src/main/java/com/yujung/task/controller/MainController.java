@@ -40,7 +40,7 @@ public class MainController {
       return "소개드릴 일정은 " + requestBody.getTaskName() + "이며, 카테고리는 " 
       + requestBody.getCategory() + "(으)로 분류됩니다. 이 일정은 " 
       + requestBody.getContents() + "등의 활동으로 구성되어 있습니다. 일정은"
-      + requestBody.getDate() + requestBody.getTime() + "에 시작됩니다.";
+      + requestBody.getDate() + requestBody.getTime() + "에 시작됩니다!";
     }
 
   @DeleteMapping("{taskNumber}")
