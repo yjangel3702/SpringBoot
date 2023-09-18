@@ -1,8 +1,6 @@
 package com.yujung.spring_basic.controller;
 
 import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,14 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.yujung.spring_basic.dto.request.PatchValidationDto;
 import com.yujung.spring_basic.dto.request.PostRequestBodyDto;
 import com.yujung.spring_basic.dto.response.TmpResponseDto;
 import com.yujung.spring_basic.service.MainService;
-import com.yujung.spring_basic.service.implement.MainServiceImplement;
-
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 // description: Controller - 레이어드 아키텍처 상의 프레젠테이션 영역 //
@@ -60,7 +54,7 @@ public class MainController {
 
   // description: @RequestMapping 중 GET Method에 한정하여 인식 //
   // description: 데이터를 얻기 위한 요청 //
-  // description: 데이터 입력시 URL로 입력 //
+  // description: 데이터 입력시 URL로 입력. //
   @GetMapping("")
   public String getMethod() {
     return mainService.getMethod();
@@ -79,7 +73,7 @@ public class MainController {
   // description: 데이터 입력시 Body로 입력 //
   @PutMapping("")
   public String putMethod() {
-    return "This method is Put Method";
+    return "This method is Put Method!";
   }
 
   // description: @RequestMapping 중 PATCH Method에 한정하여 인식 //
@@ -87,7 +81,7 @@ public class MainController {
   // description: 데이터 입력시 Body로 입력 //
   @PatchMapping("")
   public String patchMethod() {
-    return "This method is Patch Method";
+    return "This method is Patch Method!";
   }
 
   // description: @RequestMapping 중 DELETE Method에 한정하여 인식 //
