@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yujung.task.dto.request.PatchRequestBodyDto;
 import com.yujung.task.dto.request.PostRequestBodyDto;
 
 @RestController
@@ -35,9 +36,9 @@ public class MainController {
   @PatchMapping("{taskNumber}")
   public String patchTask(
     @PathVariable("taskNumber") String taskNumber,
-    @RequestBody PostRequestBodyDto requestBody
+    @RequestBody PatchRequestBodyDto requestBody
   ) {
-      return "소개드릴 일정은 " + requestBody.getTaskName() + "이며, 카테고리는 " 
+      return "소개드릴 일정은 " + requestBody.getTaskNumber() + " 번의" + requestBody.getTaskName() + "이며, 카테고리는 " 
       + requestBody.getCategory() + "(으)로 분류됩니다. 이 일정은 " 
       + requestBody.getContents() + " 등의 활동으로 구성되어 있습니다. 일정은 "
       + requestBody.getDate() + requestBody.getTime() + "에 시작됩니다!";
