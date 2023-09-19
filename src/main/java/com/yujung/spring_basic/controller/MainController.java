@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.yujung.spring_basic.dto.request.PatchNicknameRequestDto;
 import com.yujung.spring_basic.dto.request.PatchValidationDto;
 import com.yujung.spring_basic.dto.request.PostRequestBodyDto;
 import com.yujung.spring_basic.dto.request.PostUserRequestDto;
+import com.yujung.spring_basic.dto.response.DeleteUserResponseDto;
+import com.yujung.spring_basic.dto.response.PatchNicknameResponseDto;
 import com.yujung.spring_basic.dto.response.PostUserResponseDto;
 import com.yujung.spring_basic.dto.response.TmpResponseDto;
 import com.yujung.spring_basic.service.MainService;
@@ -143,6 +147,22 @@ public class MainController {
     @RequestBody @Valid PostUserRequestDto requestBody
 ) {
     ResponseEntity<? super PostUserResponseDto> response = mainService.postUser(requestBody);
+    return response;
+  }
+
+  @PatchMapping("nickname") // 요청(request)을 매개변수로, 응답(response)을 반환
+  public ResponseEntity<? super PatchNicknameResponseDto> patchNickname(
+    @RequestBody @Valid PatchNicknameRequestDto requestBody
+  ) {
+    ResponseEntity<? super PatchNicknameResponseDto> response = mainService.patchNickname(requestBody);
+    return response;
+  }
+
+  @DeleteMapping("user/{email}")
+  public ResponseEntity<? super DeleteUserResponseDto> deleteUser(
+    @PathVariable("email") String email
+  ) {
+    ResponseEntity<? super DeleteUserResponseDto> response = mainService.deleteUser(email);
     return response;
   }
 
