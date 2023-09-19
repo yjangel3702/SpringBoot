@@ -1,7 +1,12 @@
 package com.yujung.spring_basic.service.implement;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.yujung.spring_basic.dto.request.PostUserRequestDto;
+import com.yujung.spring_basic.dto.response.PostUserResponseDto;
+import com.yujung.spring_basic.entity.UserEntity;
 import com.yujung.spring_basic.repository.UserRepository;
 import com.yujung.spring_basic.service.MainService;
 
@@ -18,6 +23,22 @@ public class MainServiceImplement implements MainService {
   @Override
   public String getMethod() {
     return "This method is GET method.";
+  }
+
+  @Override
+  public ResponseEntity<? super PostUserResponseDto> postUser(PostUserRequestDto dto) {
+
+    // INSERT INTO user (email, password, nickname, tell_number, address, address_detail)
+    // VALUES(dto.getEmail(), dto.getPassword(), ...);
+
+    // description: Create 작업 순서 (INSERT) //
+    // description: 1. Entity 인스턴스 생성 //
+    UserEntity userEntity = new UserEntity(dto);
+    // description: 2. repository의 save 메서드 사용 //
+    userRepository.save(userEntity);
+
+    return ResponseEntity.status(HttpStatus.OK).body(new PostUserResponseDto("SU", "Success"));
+
   }
   
 

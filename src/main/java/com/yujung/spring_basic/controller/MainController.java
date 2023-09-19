@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.yujung.spring_basic.dto.request.PatchValidationDto;
 import com.yujung.spring_basic.dto.request.PostRequestBodyDto;
+import com.yujung.spring_basic.dto.request.PostUserRequestDto;
+import com.yujung.spring_basic.dto.response.PostUserResponseDto;
 import com.yujung.spring_basic.dto.response.TmpResponseDto;
 import com.yujung.spring_basic.service.MainService;
 import lombok.RequiredArgsConstructor;
@@ -134,6 +136,14 @@ public class MainController {
   public ResponseEntity<TmpResponseDto> getResponseEntity() {
     TmpResponseDto responseBody = new TmpResponseDto("안녕", 10);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+  }
+
+  @PostMapping("user")
+  public ResponseEntity<? super PostUserResponseDto> postUser(
+    @RequestBody @Valid PostUserRequestDto requestBody
+) {
+    ResponseEntity<? super PostUserResponseDto> response = mainService.postUser(requestBody);
+    return response;
   }
 
 }
