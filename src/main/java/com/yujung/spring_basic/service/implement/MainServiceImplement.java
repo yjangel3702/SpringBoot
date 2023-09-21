@@ -1,5 +1,6 @@
 package com.yujung.spring_basic.service.implement;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,11 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.yujung.spring_basic.dto.request.PatchNicknameRequestDto;
 import com.yujung.spring_basic.dto.request.PostUserRequestDto;
+import com.yujung.spring_basic.dto.request.SignInRequestDto;
 import com.yujung.spring_basic.dto.response.DeleteUserResponseDto;
 import com.yujung.spring_basic.dto.response.PatchNicknameResponseDto;
 import com.yujung.spring_basic.dto.response.PostUserResponseDto;
 import com.yujung.spring_basic.dto.response.ResponseDto;
+import com.yujung.spring_basic.dto.response.SignInResponseDto;
 import com.yujung.spring_basic.entity.UserEntity;
+import com.yujung.spring_basic.provider.JwtProvider;
 import com.yujung.spring_basic.repository.UserRepository;
 import com.yujung.spring_basic.service.MainService;
 
@@ -25,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class MainServiceImplement implements MainService {
 
   private final UserRepository userRepository;
+  private final JwtProvider jwtProvider;
 
   // description: PasswordEncoder - 비밀번호를 안전하게 암호화하고 검증하는 인터페이스 //
   // description: BCryptPasswordEncoder - Bcrypt 해시 알고리즘을 사용하는 PasswordEncoder 구현 클래스 //
@@ -114,6 +119,42 @@ public class MainServiceImplement implements MainService {
 
     return ResponseEntity.status(HttpStatus.OK).body(new DeleteUserResponseDto("SU", "SUCCESS"));
 
+  }
+
+  @Override
+  public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
+    
+    SignInResponseDto responseBody = null;
+
+    try {
+
+        String email = dto.getEmail();
+
+        // description: 1. dto로 받은 email을 이용하여 데이터베이스에서 조회 //
+        UserEntity userEntity = userRepository.findByEmail(email);
+        // description: 2. email에 해당하는 레코드가 존재하는지 확인 //
+        if (userEntity == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseDto("SF ", "Sign In Failed"));
+        // description: 3. userEntity에서 암호화 되어있는 password 추출 //
+        String encodedPassword = userEntity.getPassword();
+        // description: 4. dto에서 평문의 password 추출 //
+        String password = dto.getPassword();
+        // description: 5. 암호화 되어있는 password와 평문의 password를 비교 //
+        // description: matches() - 평문의 문자열과 암호화된 문자열을 비교 //
+        boolean isMatched = passwordEncoder.matches(password, encodedPassword);
+        if (!isMatched)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseDto("SF ", "Sign In Failed"));
+        // description: 6. 토큰 생성 //
+        String token = jwtProvider.create(email);
+
+        responseBody = new SignInResponseDto("SU", "SUCCESS", token);
+
+    } catch (Exception exception) {
+        exception.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDto("DBE", "Database Error"));
+    }
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
   
 

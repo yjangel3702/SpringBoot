@@ -20,9 +20,11 @@ import com.yujung.spring_basic.dto.request.PatchNicknameRequestDto;
 import com.yujung.spring_basic.dto.request.PatchValidationDto;
 import com.yujung.spring_basic.dto.request.PostRequestBodyDto;
 import com.yujung.spring_basic.dto.request.PostUserRequestDto;
+import com.yujung.spring_basic.dto.request.SignInRequestDto;
 import com.yujung.spring_basic.dto.response.DeleteUserResponseDto;
 import com.yujung.spring_basic.dto.response.PatchNicknameResponseDto;
 import com.yujung.spring_basic.dto.response.PostUserResponseDto;
+import com.yujung.spring_basic.dto.response.SignInResponseDto;
 import com.yujung.spring_basic.dto.response.TmpResponseDto;
 import com.yujung.spring_basic.provider.JwtProvider;
 import com.yujung.spring_basic.service.MainService;
@@ -197,4 +199,13 @@ public class MainController {
   ) {
     return ResponseEntity.status(HttpStatus.OK).body(subject);
   }
+
+  @PostMapping("sign-in")
+  public ResponseEntity<? super SignInResponseDto> signIn(
+    @RequestBody @Valid SignInRequestDto requestBody
+  ) {
+    ResponseEntity<? super SignInResponseDto> response = mainService.signIn(requestBody);
+    return response;
+  }
+
 }
