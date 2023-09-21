@@ -2,6 +2,8 @@ package com.yujung.spring_basic.service.implement;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.yujung.spring_basic.dto.request.PatchNicknameRequestDto;
@@ -24,6 +26,10 @@ public class MainServiceImplement implements MainService {
 
   private final UserRepository userRepository;
 
+  // description: PasswordEncoder - 비밀번호를 안전하게 암호화하고 검증하는 인터페이스 //
+  // description: BCryptPasswordEncoder - Bcrypt 해시 알고리즘을 사용하는 PasswordEncoder 구현 클래스 //
+  private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
   @Override
   public String getMethod() {
     return "This method is GET method.";
@@ -36,11 +42,19 @@ public class MainServiceImplement implements MainService {
     // VALUES(dto.getEmail(), dto.getPassword(), ...);
 
     try {
-    // description: Create 작업 순서 (INSERT) //
-    // description: 1. Entity 인스턴스 생성 //
-    UserEntity userEntity = new UserEntity(dto);
-    // description: 2. repository의 save 메서드 사용 //
-    userRepository.save(userEntity);
+        // description: 비밀번호 암호화 작업 //
+        // description: 1. dto로부터 평문의 비밀번호(암호화할 문자열)를 가져옴 //
+        String password = dto.getPassword();
+        // description: 2. PasswordEncoder의 인스턴스의 encode() 메서드로 평문을 암호화 //
+        String encodedPassword = passwordEncoder.encode(password);
+        // description: 3. dto에 다시 주입 //
+        dto.setPassword(encodedPassword);
+        
+        // description: Create 작업 순서 (INSERT) //
+        // description: 1. Entity 인스턴스 생성 //
+        UserEntity userEntity = new UserEntity(dto);
+        // description: 2. repository의 save 메서드 사용 //
+        userRepository.save(userEntity);
     } catch (Exception exception) {
       exception.printStackTrace();
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDto("DBE", "Database Error"));
